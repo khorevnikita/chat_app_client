@@ -12,7 +12,10 @@
 
 <script>
   export default {
-    name: "LandingPage"
+    name: "LandingPage",
+    created(){
+      console.log(this.$route)
+    }
   }
 </script>
 <style scoped>

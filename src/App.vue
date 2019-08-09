@@ -10,11 +10,14 @@
           </button>
           <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav">
-              <li class="nav-item  active">
+              <li class="nav-item  active" v-if="!token">
                 <router-link class="nav-link text-white" to="/signin">Sign In</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-if="!token">
                 <router-link class="nav-link text-white" to="/signup">Sign Up</router-link>
+              </li>
+              <li class="nav-item" v-if="token">
+                <router-link class="nav-link text-white" to="/spaces">My spaces</router-link>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-white" href="https://github.com/khorevnikita/chat_app_client" target="_blank">Help us</a>
@@ -39,7 +42,12 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data(){
+    return{
+      token:localStorage.getItem('user-token'),
+    }
+  }
 }
 </script>
 

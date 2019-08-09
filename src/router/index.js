@@ -2,62 +2,77 @@ import Vue from 'vue'
 import Router from 'vue-router'
 //import HelloWorld from '@/components/HelloWorld'
 import LandingPage from "@/components/LandingPage";
+import SpacesList from "@/components/Space/SpacesList";
+import SpaceMain from "@/components/SpaceMain";
 import Login from "@/components/Auth/Login";
 import Register from "@/components/Auth/Register";
-import SpacesList from "@/components/Space/SpacesList";
-import SpacePage from "@/components/Space/SpacePage";
+import NewChannel from "@/components/Space/Channel/NewChannel";
 
 window.axios = require('axios');
 Vue.use(Router);
 
-const router = new Router({
-    routes: [
-      {
-        path: '/',
-        name: 'LandingPage',
-        component: LandingPage
-      },
-      {
-        path: '/',
-        name: 'SpacePage',
-        component: SpacePage
-      },
+/**
+ * CHECK TOKEN IN LOCAL STORAGE
+ */
+const token = localStorage.getItem('user-token');
+window.has_token = false;
+if (token) {
+  axios.defaults.headers.common['Authorization'] = token;
+  window.has_token = true;
+}
 
+/**
+ * CHECK IS SUBDOMAIN
+ */
+
+let subdomain = window.location.host.split(".")[0];
+let host = "chatclient";
+
+var indexPage = {
+  path: '/',
+  name: 'LandingPage',
+  component: LandingPage
+};
+if (subdomain === host) {
+  if (has_token) {
+    indexPage = {
+      path: '/',
+      name: 'SpaceIndex',
+      component: SpaceMain
+    }
+  }
+}
+const router = new Router({
+  routes: [
+    indexPage,
       {
         path: "/signin",
         name: 'Login',
         component: Login,
-        beforeEnter: (to, from, next) => {
-          next(!window.auth_check)
-        },
       },
       {
         path: "/signup",
         name: 'Register',
         component: Register,
-        beforeEnter: (to, from, next) => {
-          next(!window.auth_check)
-        },
       },
       {
         path: "/spaces",
         name: 'Spaces',
         component: SpacesList,
-        beforeEnter: (to, from, next) => {
-          next(window.auth_check)
-        }
-      }
+      },
+    {
+      path: "/channel/:id",
+      name: 'Channel',
+      component: SpaceMain,
+    },
+    {
+      path: "/new-channel",
+      name: 'NewChannel',
+      component: NewChannel,
+    },
+
     ]
   },
 );
-router.beforeEach((to, from, next) => {
-  var subdir = window.location.host.split(".")[0];
-  var domain = "chatclient";
-  if (subdir !== domain) {
-    next({name: "SpacePage", params: {subdomain: subdir}})
-  } else {
-    next()
-  }
-});
 
 export default router;

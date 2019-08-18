@@ -4,12 +4,15 @@
 
     <hr>
 
-    <ul class="nav justify-content-end">
+    <ul class="nav justify-content-end" v-if="channel.type==='public'">
       <li class="nav-item">
         <button class="nav-link text-white" @click="$router.push('/channel/' + channel.id + '/members')">Members</button>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" v-if="is_founder">
         <button class="nav-link text-white" @click="$router.push('/channel/' + channel.id + '/settings')">Settings</button>
+      </li>
+      <li class="nav-item" v-else>
+        <button class="nav-link text-white" @click="leaveChannel()">Leave channel</button>
       </li>
     </ul>
     <section class="chat-container" v-bind:style="{'height':chat_container_height+'px'}">
@@ -51,6 +54,7 @@
         users: [],
         messages: [],
         text: "",
+        is_founder: false,
       }
     },
     created() {
@@ -82,8 +86,15 @@
           switch (r.data.status) {
             case 1:
               this.messages = r.data.channel.messages;
-              this.name = r.data.channel.name;
               this.users = r.data.channel.users;
+              this.is_founder = r.data.is_founder;
+
+              this.name = r.data.channel.name;
+              if (this.channel.type === 'private') {
+                let target = this.users.filter(u => u.id != this.me.id)[0];
+                if (target) this.name = target.name + " " + target.surname
+              }
+
               this.$nextTick(function () {
                 var chatLog = document.querySelectorAll('.chat-log');
                 chatLog[0].scrollTop = chatLog[0].scrollHeight;
@@ -108,17 +119,22 @@
               avatar: this.me.avatar,
               pivot: {
                 is_author: 1
-              }
+              },
             }
-          ]
+          ],
+          channel_id: this.channel.id
         };
-        this.messages.push(new_message);
-        this.$nextTick(function () {
-          var chatLog = document.querySelectorAll('.chat-log');
-          chatLog[0].scrollTop = chatLog[0].scrollHeight;
+        axios.post("http://chat.local/api/spaces/" + this.subdomain + "/channels/" + this.channel.id + "/send-message", new_message).then(r => {
+          if (r.data.status == 1) {
+            this.messages.push(new_message);
+            this.$nextTick(function () {
+              var chatLog = document.querySelectorAll('.chat-log');
+              chatLog[0].scrollTop = chatLog[0].scrollHeight;
+            });
+            this.scrollLog();
+            this.text = ""
+          }
         });
-        this.scrollLog();
-        this.text = ""
       },
       scrollLog() {
         var chatLog = document.querySelectorAll('.chat-log');
@@ -129,6 +145,17 @@
       },
       time(date) {
         return moment(date, "YYYY-MM-DD HH:mm:ss").format("HH:mm")
+      },
+      leaveChannel() {
+        if (!confirm("Are you sure?")) return false
+
+        axios.post("http://chat.local/api/spaces/" + this.subdomain + "/channels/" + this.channel.id + "/leave").then(r => {
+          if (r.data.status == 1) {
+            this.$emit("channel_deleted", this.channel.id);
+            this.$router.push('/');
+          }
+          return
+        })
       }
     }
   }

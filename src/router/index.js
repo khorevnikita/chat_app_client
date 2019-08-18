@@ -7,6 +7,9 @@ import SpaceMain from "@/components/SpaceMain";
 import Login from "@/components/Auth/Login";
 import Register from "@/components/Auth/Register";
 import NewChannel from "@/components/Space/Channel/NewChannel";
+import NewSpace from "@/components/Space/NewSpace";
+import Settings from "@/components/Space/Channel/Settings";
+import Members from "@/components/Space/Channel/Members";
 
 window.axios = require('axios');
 Vue.use(Router);
@@ -33,7 +36,7 @@ var indexPage = {
   name: 'LandingPage',
   component: LandingPage
 };
-if (subdomain === host) {
+if (subdomain !== host) {
   if (has_token) {
     indexPage = {
       path: '/',
@@ -45,21 +48,36 @@ if (subdomain === host) {
 const router = new Router({
   routes: [
     indexPage,
-      {
-        path: "/signin",
-        name: 'Login',
-        component: Login,
-      },
-      {
-        path: "/signup",
-        name: 'Register',
-        component: Register,
-      },
-      {
-        path: "/spaces",
-        name: 'Spaces',
-        component: SpacesList,
-      },
+    {
+      path: "/signin",
+      name: 'Login',
+      component: Login,
+    },
+    {
+      path: "/signup",
+      name: 'Register',
+      component: Register,
+    },
+    {
+      path: "/spaces",
+      name: 'Spaces',
+      component: SpacesList,
+    },
+    {
+      path: "/new-space",
+      name: 'NewSpaces',
+      component: NewSpace,
+    },
+    {
+      path: "/channel/:id/settings",
+      name: 'ChannelSettings',
+      component: Settings,
+    },
+    {
+      path: "/channel/:id/members",
+      name: 'ChannelMembers',
+      component: Members,
+    },
     {
       path: "/channel/:id",
       name: 'Channel',
@@ -70,7 +88,6 @@ const router = new Router({
       name: 'NewChannel',
       component: NewChannel,
     },
-
     ]
   },
 );

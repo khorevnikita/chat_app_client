@@ -19,6 +19,10 @@
           {{channel.name}}
           <span class="badge badge-info badge-pill">14</span>
         </li>
+        <li class="list-group-item title">
+          <p class="float-left mb-0">Users</p>
+          <a @click="inviteUser" class="btn btn-warning btn-sm float-right" role="button">Invite user</a>
+        </li>
       </ul>
     </div>
     <div class="col-sm-7 d-flex align-items-center">
@@ -92,6 +96,9 @@
       },
       newChannel() {
         this.$router.push("/new-channel")
+      },
+      inviteUser() {
+
       }
     }
   }

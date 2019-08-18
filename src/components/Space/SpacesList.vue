@@ -1,11 +1,17 @@
 <template>
-  <div class="row">
+  <div class="row container m-auto">
     <div class="col-12 col-sm-6 col-md-4 m-auto" v-for="space in spaces">
       <div class="card">
-        <div class="card-body">
-          <p>{{space.name}}</p>
-          <hr>
-          <a :href="'http://'+ space.subdomain +'.chatclient.local:8080'" class="text-warning">open ></a>
+        <div class="flex-column m-auto text-center">
+          <h5 class="card-title text-warning">{{space.name}}</h5>
+          <a :href="'http://'+ space.subdomain +'.chatclient.local:8080'" class="card-link">Open space</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 m-auto">
+      <div class="card">
+        <div class="flex-column m-auto text-center">
+          <button @click="$router.push('/new-space')" class="card-link text-primary">Create space</button>
         </div>
       </div>
     </div>
@@ -15,12 +21,16 @@
 <script>
   export default {
     name: "List",
+    props: ['subdomain', "base_domain"],
     data() {
       return {
         spaces: []
       }
     },
     created() {
+      if (this.subdomain !== this.base_domain) {
+        window.location.href = "http://" + this.base_domain + ".local:8080/#/spaces"
+      }
       this.fetchSpaces()
     },
     methods: {
@@ -34,5 +44,7 @@
 </script>
 
 <style scoped>
-
+  .card {
+    height: 200px;
+  }
 </style>

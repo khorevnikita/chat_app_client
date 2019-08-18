@@ -9,7 +9,7 @@
         <a href="#" class="btn btn-lg btn-secondary">Learn more on GitHub</a>
       </p>
     </div>
-    <space-main :subdomain="subdomain" v-else></space-main>
+    <space-main v-else></space-main>
   </main>
 </template>
 
@@ -19,12 +19,7 @@
   export default {
     name: "LandingPage",
     components: {SpaceMain},
-    data() {
-      return {
-        subdomain: window.location.host.split(".")[0],
-        base_domain: "chatclient"
-      }
-    },
+    props: ['subdomain', 'base_domain'],
     created(){
       console.log(window.location.host.split(".")[0])
     }

@@ -27,7 +27,7 @@
         </nav>
       </header>
 
-      <router-view/>
+      <router-view :subdomain="subdomain" :base_domain="base_domain" :token="token"/>
 
       <footer class="mt-auto text-center">
         <div class="text-white">
@@ -46,6 +46,8 @@ export default {
   data(){
     return{
       token:localStorage.getItem('user-token'),
+      subdomain: window.location.host.split(".")[0],
+      base_domain: "chatclient"
     }
   }
 }

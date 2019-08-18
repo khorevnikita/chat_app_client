@@ -1,13 +1,21 @@
 <template>
-  <div class="h-100">
+  <div class="h-100 w-100">
     <h4 id="channel-name">{{name}}</h4>
+
     <hr>
+
+    <ul class="nav justify-content-end">
+      <li class="nav-item">
+        <button class="nav-link text-white" @click="$router.push('/channel/' + channel.id + '/members')">Members</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link text-white" @click="$router.push('/channel/' + channel.id + '/settings')">Settings</button>
+      </li>
+    </ul>
     <section class="chat-container" v-bind:style="{'height':chat_container_height+'px'}">
       <div class="chat-log" v-bind:style="{'height':chat_log_height+'px'}">
         <div class="media mt-3" v-for="message in messages">
-          <img
-            :src="messageAuthor(message).avatar?messageAuthor(message):'https://www.nicepng.com/png/detail/164-1649946_happy-smiling-emoticon-face-vector-smile.png'"
-            class="mr-3" alt="...">
+          <img :src="messageAuthor(message).avatar" class="mr-3" alt="...">
           <div class="media-body">
             <h5 class="mt-0 text-left">
               {{messageAuthor(message).name}} {{messageAuthor(message).surname}}

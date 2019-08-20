@@ -36,7 +36,12 @@
         this.validation = {};
         axios.post("http://chat.local/api/spaces/" + this.subdomain + "/invite", {email: this.email}).then(r => {
           if (r.data.status == 1) {
-            alert("OK")
+            swal.fire({
+              type: 'success',
+              title: 'Information has been updated',
+              showConfirmButton: false,
+              timer: 1500
+            })
           } else {
             console.log(r);
           }

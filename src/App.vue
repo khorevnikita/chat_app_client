@@ -23,6 +23,9 @@
                 <a class="nav-link text-white" href="https://github.com/khorevnikita/chat_app_client" target="_blank">Help us</a>
               </li>
               <li class="nav-item" v-if="token">
+                <a class="nav-link text-white" style="cursor: pointer" @click="$router.push('/profile')">Profile</a>
+              </li>
+              <li class="nav-item" v-if="token">
                 <a class="nav-link text-white" style="cursor: pointer" @click="$router.push('/logout')">Logout</a>
               </li>
             </ul>

@@ -1,5 +1,5 @@
 <template>
-  <div class="row" v-bind:class="{'h-100':open_channel.id}">
+  <div class="row h-100" v-bind:class="{'h-100':open_channel.id}">
     <div class="col-sm-4 h-100">
       <ul class="list-group h-100 overflow-y-scroll">
         <li class="list-group-item d-flex justify-content-between disabled">

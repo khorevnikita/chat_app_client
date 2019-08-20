@@ -13,6 +13,7 @@ import Members from "@/components/Space/Channel/Members";
 import InviteUser from "@/components/Space/InviteUser";
 import VerifyEmail from "@/components/Auth/VerifyEmail";
 import Logout from "@/components/Auth/Logout";
+import Profile from "@/components/User/Profile";
 
 window.axios = require('axios');
 Vue.use(Router);
@@ -27,7 +28,6 @@ let subdomain = window.location.host.split(".")[0];
 let host = "chatclient";
 
 let token = Cookies.get("user-token");
-console.log(token)
 if (token) {
   axios.defaults.headers.common['Authorization'] = token;
 }
@@ -68,7 +68,11 @@ const router = new Router({
       name: 'Logout',
       component: Logout,
     },
-
+    {
+      path: "/profile",
+      name: 'Profile',
+      component: Profile,
+    },
     {
       path: "/spaces",
       name: 'Spaces',

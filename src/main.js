@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
+window.swal = require('sweetalert2');
+import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.use(Vuetify);
 
 require('jquery');
@@ -20,3 +22,18 @@ new Vue({
   template: '<App/>',
   vuetify: new Vuetify(),
 });
+
+document.addEventListener("DOMContentLoaded", function (event) {
+  resize();
+});
+window.addEventListener('resize', function (event) {
+  resize()
+});
+
+function resize() {
+  let window_height = window.innerHeight;
+  let body_height = document.getElementsByTagName('body')[0].clientHeight;
+  if (window_height > body_height) {
+    document.body.style.cssText = "height:" + window_height + "px !important"
+  }
+}

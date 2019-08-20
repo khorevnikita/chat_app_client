@@ -1,7 +1,7 @@
 <template>
   <div class="row" v-bind:class="{'h-100':open_channel.id}">
-    <div class="col-sm-4">
-      <ul class="list-group">
+    <div class="col-sm-4 h-100">
+      <ul class="list-group h-100 overflow-y-scroll">
         <li class="list-group-item d-flex justify-content-between disabled">
           <span>{{space.name}}</span>
         </li>
@@ -81,6 +81,7 @@
     methods: {
       fetchChannels() {
         axios.get("http://chat.local/api/spaces/" + this.sd).then(r => {
+          console.log(r.data);
           switch (r.data.status) {
             case 1:
               this.space = r.data.space;
@@ -89,7 +90,7 @@
               this.badges = r.data.badges;
               break;
             case 9:
-              this.$router.push("/signin");
+             // this.$router.push("/signin");
               break;
 
             default:
@@ -115,7 +116,7 @@
         console.log(channel_id);
       },
       inviteUser() {
-
+        this.$router.push("/invite-user")
       },
       openPrivateChannel(user) {
         axios.get("http://chat.local/api/spaces/" + this.sd + "/get-user-channel?user_id=" + user.id).then(r => {
@@ -153,8 +154,9 @@
   .list-group-item.title:hover > p, .list-group-item.title:hover > a {
     color: #fff;
   }
-
-
+  .overflow-y-scroll{
+    overflow-y: scroll;
+  }
   .form-control {
     background: #333333;
   }

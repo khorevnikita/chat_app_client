@@ -37,9 +37,8 @@
             password: this.password,
           }).then(r => {
             if (r.data.status == 1) {
-              localStorage.setItem('user-token', r.data.data.token); // store the token in localstorage
+              Cookies.set("user-token", r.data.data.token, {expires: 7,domain:".chatclient.local"});
               axios.defaults.headers.common['Authorization'] = r.data.data.token;
-              window.auth_check = 1;
               this.$router.push("/spaces")
             }
           }).catch(error => {

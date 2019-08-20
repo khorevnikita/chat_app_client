@@ -10,19 +10,14 @@ import NewChannel from "@/components/Space/Channel/NewChannel";
 import NewSpace from "@/components/Space/NewSpace";
 import Settings from "@/components/Space/Channel/Settings";
 import Members from "@/components/Space/Channel/Members";
+import InviteUser from "@/components/Space/InviteUser";
+import VerifyEmail from "@/components/Auth/VerifyEmail";
+import Logout from "@/components/Auth/Logout";
 
 window.axios = require('axios');
 Vue.use(Router);
 
-/**
- * CHECK TOKEN IN LOCAL STORAGE
- */
-const token = localStorage.getItem('user-token');
-window.has_token = false;
-if (token) {
-  axios.defaults.headers.common['Authorization'] = token;
-  window.has_token = true;
-}
+window.Cookies = require("js-cookie");
 
 /**
  * CHECK IS SUBDOMAIN
@@ -31,13 +26,18 @@ if (token) {
 let subdomain = window.location.host.split(".")[0];
 let host = "chatclient";
 
+let token = Cookies.get("user-token");
+console.log(token)
+if (token) {
+  axios.defaults.headers.common['Authorization'] = token;
+}
 var indexPage = {
   path: '/',
   name: 'LandingPage',
   component: LandingPage
 };
 if (subdomain !== host) {
-  if (has_token) {
+  if (token) {
     indexPage = {
       path: '/',
       name: 'SpaceIndex',
@@ -58,6 +58,17 @@ const router = new Router({
       name: 'Register',
       component: Register,
     },
+    {
+      path: "/verify-email",
+      name: 'VerifyEmail',
+      component: VerifyEmail,
+    },
+    {
+      path: "/logout",
+      name: 'Logout',
+      component: Logout,
+    },
+
     {
       path: "/spaces",
       name: 'Spaces',
@@ -87,6 +98,11 @@ const router = new Router({
       path: "/new-channel",
       name: 'NewChannel',
       component: NewChannel,
+    },
+    {
+      path: "/invite-user",
+      name: 'InviteUser',
+      component: InviteUser,
     },
     ]
   },

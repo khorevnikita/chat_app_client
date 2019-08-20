@@ -31,12 +31,28 @@
       if (this.subdomain !== this.base_domain) {
         window.location.href = "http://" + this.base_domain + ".local:8080/#/spaces"
       }
+      console.log(Cookies.get())
       this.fetchSpaces()
     },
     methods: {
       fetchSpaces() {
         axios.get("http://chat.local/api/spaces").then(r => {
-          this.spaces = r.data.data.spaces;
+          if (r.data.status == 1) {
+            this.spaces = r.data.data.spaces;
+          } else {
+            console.log(r.data);
+            switch (r.data.status) {
+              case 0:
+                //  this.$router.push("/logout");
+                break;
+              case 9:
+                // this.$router.push("/signin");
+                break;
+              default:
+                console.log(r.data);
+                break;
+            }
+          }
         })
       }
     }
